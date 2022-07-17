@@ -20,22 +20,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.nevBar.add(MeowBottomNavigation.Model(1,R.drawable.ic_search))
-        binding.nevBar.add(MeowBottomNavigation.Model(2,R.drawable.ic_search))
-
-        binding.nevBar.show(1,true)
-        replaceFrag(CoinsFragment())
-
-        binding.nevBar.setOnClickMenuListener {
-            when(it.id) {
-                1 -> {
-                      replaceFrag(CoinsFragment())
-                }
-
-                2 ->{
-                      replaceFrag(AddCoinsFragment())
-                }
-            }
         }
     }
 

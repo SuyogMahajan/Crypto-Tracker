@@ -92,8 +92,8 @@ dependencies {
     implementation "androidx.room:room-ktx:$roomdbVersion"
 
     // Bottom nev
-    implementation 'com.etebarian:meow-bottom-navigation:1.3.1'
 
     // Any Chart Dependency
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
  }
