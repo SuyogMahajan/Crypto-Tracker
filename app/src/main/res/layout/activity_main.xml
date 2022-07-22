@@ -15,10 +15,11 @@
         android:layout_alignParentBottom="true"
         android:background="#BCBCBC"
         android:padding="5dp"
-
         app:itemIconSize="40dp"
         app:labelVisibilityMode="unlabeled"
-        app:menu="@menu/menu" />
+        app:menu="@menu/menu"
+
+        />
 
     <FrameLayout
 

@@ -27,8 +27,9 @@ ext {
     kotlinVersion = '1.7.0'
 
     // App Dependencies
+    glideVersion = '4.13.2'
     materialVersion = '1.6.1'
-    retrofitVersion = '2.0.0-beta2'
+    retrofitVersion = '2.9.0'
     gsonVersion = '2.8.9'
     okhttpVersion = '4.9.3'
     coroutineVersion = '1.5.2'

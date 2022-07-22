@@ -65,8 +65,8 @@ dependencies {
 
 
     // retrofit
-    implementation "com.squareup.retrofit:retrofit:$retrofitVersion"
-    implementation "com.squareup.retrofit:converter-gson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation "com.google.code.gson:gson:$gsonVersion"
 
 
@@ -79,10 +79,9 @@ dependencies {
     // Coroutine
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
 
-
-    // Picasso
-    implementation "com.squareup.picasso:picasso:$picassoVersion"
-
+    // Glide dependencies
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
 
     // Room Database
     implementation "androidx.room:room-runtime:$roomdbVersion"

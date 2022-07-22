@@ -3,9 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
+    android:layout_margin="5dp"
     android:background="@drawable/box_background"
+    android:clickable="true"
+    android:focusable="true"
+    android:hapticFeedbackEnabled="true"
     android:elevation="10dp">
+
+    <ImageButton
+        android:id="@+id/addButton"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:visibility="gone"
+        android:src="@drawable/ic_add_drawable"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,6 +30,7 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iconIV"
+            android:background="@color/white"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_margin="10dp"
@@ -40,14 +55,14 @@
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
+
             <TextView
-                android:id="@+id/varTv"
+                android:id="@+id/totalSupplyTv"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center|start"
-                android:text="3.33%"
-                android:textColor="#25E721"
+                android:text="Total Supply"
                 android:textSize="14sp" />
 
         </LinearLayout>
@@ -72,17 +87,15 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/totalSupplyTv"
+                android:id="@+id/varTv"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center|start"
-                android:text="Total Supply"
+                android:text="3.33%"
+                android:textColor="#25E721"
                 android:textSize="14sp" />
-
         </LinearLayout>
-
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

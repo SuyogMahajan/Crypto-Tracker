@@ -19,8 +19,10 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val coinFrag = CoinsFragment()
+        val addCoinFrag = AddCoinsFragment()
 
-        replaceFrag(CoinsFragment())
+        replaceFrag(coinFrag)
         binding.navBar.setOnItemSelectedListener { menuItem ->
 
             Log.d("ITEM_ID",menuItem.itemId.toString())
@@ -29,19 +31,17 @@ class MainActivity : AppCompatActivity() {
 
             when(menuItem.itemId) {
                 R.id.listButton -> {
-                    replaceFrag(CoinsFragment())
+                    replaceFrag(coinFrag)
                 }
 
                 R.id.addCoin -> {
-                    replaceFrag(AddCoinsFragment())
+                    replaceFrag(addCoinFrag)
                 }
             }
             true
         }
 
-
-
-        }
+    }
 
     private fun replaceFrag(frag:Fragment) {
 
