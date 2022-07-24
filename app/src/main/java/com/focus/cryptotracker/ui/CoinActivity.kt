@@ -1,9 +1,11 @@
 package com.focus.cryptotracker.ui
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -51,6 +53,7 @@ class CoinActivity : AppCompatActivity() {
             refreshChart()
         }
 
+
     }
 
     private fun setChart(coin: Coin) {
@@ -72,43 +75,59 @@ class CoinActivity : AppCompatActivity() {
 
         val chartData = viewModel.getCoinChart(coin.id)
 
+
+
         chartData.observe(this, object : Observer<List<List<Double>>> {
             override fun onChanged(t: List<List<Double>>?) {
-                val candleEntryList = t!!.map {
-                    CandleEntry(
-                        it[0].toFloat() / 8640000,
-                        it[2].toFloat(),
-                        it[3].toFloat(),
-                        it[1].toFloat(),
-                        it[4].toFloat()
-                    )
+
+                if (t!!.isEmpty() || t!![0].isEmpty()) {
+                    binding.onlineStatus.apply {
+                        visibility = View.VISIBLE
+                        text = "You are offline."
+                        setBackgroundColor(Color.GRAY)
+                    }
+
+                } else {
+
+                    val candleEntryList = t!!.map {
+                        CandleEntry(
+                            it[0].toFloat() / 8640000,
+                            it[2].toFloat(),
+                            it[3].toFloat(),
+                            it[1].toFloat(),
+                            it[4].toFloat()
+                        )
+                    }
+
+                    val candleDataSet = CandleDataSet(candleEntryList, "Price")
+
+                    candleDataSet.shadowColor = getColor(R.color.white)
+                    candleDataSet.shadowWidth = 1f;
+                    candleDataSet.setDrawValues(false)
+
+                    candleDataSet.decreasingColor = Color.RED
+                    candleDataSet.decreasingPaintStyle = Paint.Style.STROKE
+
+                    candleDataSet.increasingColor = Color.GREEN
+                    candleDataSet.increasingPaintStyle = Paint.Style.STROKE
+                    candleDataSet.color = getColor(R.color.black)
+
+
+                    val candleData = CandleData(candleDataSet)
+
+                    binding.chatViewCandle.animateXY(2000, 1000)
+                    binding.chatViewCandle.startLayoutAnimation()
+                    binding.chatViewCandle.data = candleData
+                    binding.chatViewCandle.startLayoutAnimation()
+
+
+
+                    binding.onlineStatus.visibility = View.GONE
+
                 }
-
-                val candleDataSet = CandleDataSet(candleEntryList, "Price")
-
-                candleDataSet.shadowColor = getColor(R.color.white)
-                candleDataSet.shadowWidth = 1f;
-                candleDataSet.setDrawValues(false)
-
-                candleDataSet.decreasingColor = Color.RED
-                candleDataSet.decreasingPaintStyle = Paint.Style.STROKE
-
-                candleDataSet.increasingColor = Color.GREEN
-                candleDataSet.increasingPaintStyle = Paint.Style.STROKE
-                candleDataSet.color = getColor(R.color.black)
-
-
-                val candleData = CandleData(candleDataSet)
-
-                binding.chatViewCandle.animateXY(2000,1000)
-                binding.chatViewCandle.startLayoutAnimation()
-                binding.chatViewCandle.data = candleData
-                binding.chatViewCandle.startLayoutAnimation()
-
 
                 binding.refreshLayout.isRefreshing = false
             }
-
         })
 
     }

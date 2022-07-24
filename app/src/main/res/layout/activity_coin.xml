@@ -12,22 +12,33 @@
     tools:context=".ui.CoinActivity"
 
     >
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    android:id="@+id/refreshLayout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_above="@id/card"
-    >
 
-    <com.github.mikephil.charting.charts.CandleStickChart
-
-        android:id="@+id/chatViewCandle"
+    <TextView
+        android:id="@+id/onlineStatus"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:padding="2dp"
+        android:elevation="20dp"
+        android:text="You are offline."
+        android:textColor="@color/black" />
 
-        />
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/card">
 
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <com.github.mikephil.charting.charts.CandleStickChart
+
+            android:id="@+id/chatViewCandle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
     <LinearLayout
@@ -163,20 +174,20 @@
 
             />
 
-        <Button
+<!--        <Button-->
 
-            android:id="@+id/siteButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/box_background"
-            android:backgroundTint="#00A3FF"
-            android:text="Site"
-            android:textColor="@color/white"
+<!--            android:id="@+id/siteButton"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="15dp"-->
+<!--            android:layout_marginTop="5dp"-->
+<!--            android:layout_marginBottom="10dp"-->
+<!--            android:background="@drawable/box_background"-->
+<!--            android:backgroundTint="#00A3FF"-->
+<!--            android:text="Site"-->
+<!--            android:textColor="@color/white"-->
 
-            />
+<!--            />-->
 
     </LinearLayout>
 

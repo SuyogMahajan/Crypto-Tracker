@@ -8,6 +8,7 @@ import com.focus.cryptotracker.data.source.local.CoinLocalDataSource
 import com.focus.cryptotracker.data.source.local.LocalDatabase
 import com.focus.cryptotracker.data.source.remote.CoinRemoteDataSource
 import com.focus.cryptotracker.data.source.remote.retrofit.CryptoApiClient
+import com.focus.cryptotracker.util.Result
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
@@ -23,15 +24,24 @@ class CoinRepository(val context: Context,
        suspend fun getCoins():List<Coin> = withContext(ioDispatcher){
 
            val v = localDataSource.getCoins()
-
            val l = v.map { it.id }
+
            val res = coinRemoteDataSource.getCoin(l)
 
-           if(res.isSuccessful){
-                 return@withContext res.body()!!
-           }else{
-                 return@withContext v
+           when(res) {
+               is Result.Success -> {
+                   res.data!!
+               }
+
+              is Result.Error -> {
+                   v
+               }
+
+               else -> {
+                   v
+               }
            }
+
        }
 
        // adding to list
@@ -39,28 +49,34 @@ class CoinRepository(val context: Context,
         suspend fun addSearchCoin(coin:SearchCoin) = withContext(ioDispatcher){
 
             val id = coin.id
-            val dataCoin = coinRemoteDataSource.getCoin(listOf(id)).body()!!
-            localDataSource.addCoin(dataCoin[0])
+            val dataCoin = coinRemoteDataSource.getCoin(listOf(id))
+
+            if(dataCoin is Result.Success) {
+                   localDataSource.addCoin(dataCoin.data!![0])
+               }
+
 
         }
 
     suspend fun getSearch(text: String): ListSearchCoin = withContext(ioDispatcher){
         val r = coinRemoteDataSource.getSearch(text)
-      return@withContext  if(r.isSuccessful){
-          r.body()!!
-      }else{
+        return@withContext  if(r is Result.Success){
+          r.data!!
+        }else{
           ListSearchCoin(listOf())
         }
     }
 
       suspend fun getCoinChart(id: String): List<List<Double>> {
+
         val r = coinRemoteDataSource.getCoinChart(id)
-          if(r.isSuccessful){
-              return r.body()!!
+          if(r is Result.Success){
+              return r.data!!
           }else{
               return listOf(listOf())
           }
-    }
+
+      }
 
        //  delete from list
        suspend fun deleteLocalCoin(coin: Coin) = withContext(ioDispatcher){
