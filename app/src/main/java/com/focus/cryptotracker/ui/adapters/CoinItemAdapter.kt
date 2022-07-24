@@ -29,10 +29,10 @@ class CoinItemAdapter(val context: Context):RecyclerView.Adapter<CoinItemAdapter
         fun bind(position: Int) {
 
             binding.nameTv.text = list[position].name
-            binding.prizeTv.text = "$" + list[position].currentPrice.toString()
-            binding.varTv.text = "%"  +list[position].priceChangePercentage24h.toString()
-            binding.totalSupplyTv.text = "$" +list[position].totalSupply.toLong().toString()
-            Glide.with(context).load(list[position].image).placeholder(R.drawable.ic_bitcoin).into(binding.iconIV)
+            binding.prizeTv.text = "$" + list[position].current_price.toString()
+            binding.varTv.text = "%"  +list[position].price_change_percentage_24h.toString()
+            binding.totalSupplyTv.text = "$" +list[position].total_supply.toLong().toString()
+            Glide.with(context).load(list[position].image).into(binding.iconIV)
 
             binding.root.setOnClickListener {
                 onItemClick.onItemClick(list[position])

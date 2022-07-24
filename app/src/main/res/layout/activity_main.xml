@@ -13,11 +13,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#BCBCBC"
         android:padding="5dp"
-        app:itemIconSize="40dp"
         app:labelVisibilityMode="unlabeled"
+        app:itemIconSize="25dp"
         app:menu="@menu/menu"
+
+        />
+
+    <TextView
+        android:id="@+id/onlineStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="You are offline."
+        android:visibility="gone"
+        android:layout_above="@id/navBar"
 
         />
 

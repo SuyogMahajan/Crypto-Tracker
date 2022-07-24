@@ -13,7 +13,17 @@ class SearchCoinItemAdapter (val context: Context): RecyclerView.Adapter<SearchC
 
     var list: ArrayList<SearchCoin> = ArrayList<SearchCoin>()
 
-    inner class getViewHolder(val binding: ListItemCoinDetailsBinding) : RecyclerView.ViewHolder(binding.root)
+    interface onButtonClickInterface{
+        fun onAddButtonClick(searchCoin: SearchCoin)
+    }
+
+    lateinit var onButtonClick: onButtonClickInterface
+
+    fun setOnButtonClickInterface(onClick:onButtonClickInterface){
+        onButtonClick = onClick
+    }
+
+    inner class getViewHolder(val binding: ListItemCoinDetailsBinding,val onClick: onButtonClickInterface) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): getViewHolder {
         return getViewHolder(
@@ -21,7 +31,7 @@ class SearchCoinItemAdapter (val context: Context): RecyclerView.Adapter<SearchC
                 LayoutInflater.from(context),
                 parent,
                 false
-            )
+            ),onButtonClick
         )
     }
 
@@ -37,6 +47,9 @@ class SearchCoinItemAdapter (val context: Context): RecyclerView.Adapter<SearchC
 
         Glide.with(context).load(list[position].image).into(holder.binding.iconIV)
 
+        holder.binding.addButton.setOnClickListener {
+            holder.onClick.onAddButtonClick(list[position])
+        }
     }
 
     override fun getItemCount() = list.size

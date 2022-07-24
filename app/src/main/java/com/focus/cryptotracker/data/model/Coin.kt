@@ -1,29 +1,33 @@
 package com.focus.cryptotracker.data.model
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import org.jetbrains.annotations.NotNull
 import java.io.Serializable
 
+@Entity(tableName = "coin_table")
 data class Coin(
-	@SerializedName("price_change_percentage_24h")
-	val priceChangePercentage24h: Double,
-	@SerializedName("symbol")
+
+	@PrimaryKey(autoGenerate = true)
+	val lid:Long = 0L,
+
+
+	val price_change_percentage_24h: Double,
 	val symbol: String,
-	@SerializedName("price_change_24h")
-	val priceChange24h: Double,
-	@SerializedName("market_cap_rank")
-	val marketCapRank: Long,
-	@SerializedName("market_cap_change_percentage_24h")
-	val marketCapChangePercentage24h: Double,
-	@SerializedName("id")
+	val price_change_24h: Double,
+	val market_cap_rank: Long,
+
+	val market_cap_change_percentage_24h: Double,
+
 	val id: String,
-	@SerializedName("image")
+
 	val image: String,
-	@SerializedName("circulating_supply")
-	val circulatingSupply: Double,
-	@SerializedName("total_supply")
-	val totalSupply: Double,
-	@SerializedName("name")
+	val circulating_supply: Double,
+
+	val total_supply: Double,
 	val name: String,
-	@SerializedName("current_price")
-	val currentPrice: Double
+
+	val current_price: Double
 ):Serializable

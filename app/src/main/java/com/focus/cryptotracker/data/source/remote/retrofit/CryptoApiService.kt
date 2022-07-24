@@ -1,6 +1,5 @@
 package com.focus.cryptotracker.data.source.remote.retrofit
 
-import com.focus.cryptotracker.data.model.Chart
 import com.focus.cryptotracker.data.model.Coin
 import com.focus.cryptotracker.data.model.ListSearchCoin
 import com.focus.cryptotracker.data.model.SearchCoin

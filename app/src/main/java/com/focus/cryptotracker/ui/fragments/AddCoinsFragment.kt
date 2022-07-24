@@ -1,16 +1,21 @@
 package com.focus.cryptotracker.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.focus.cryptotracker.R
-import com.focus.cryptotracker.data.source.remote.CryptoApiDataSource
+import com.focus.cryptotracker.data.model.SearchCoin
+import com.focus.cryptotracker.data.source.remote.CoinRemoteDataSource
+import com.focus.cryptotracker.data.source.repository.CoinDataViewModel
 import com.focus.cryptotracker.databinding.FragmentAddCoinsBinding
-import com.focus.cryptotracker.databinding.FragmentCoinsBinding
-import com.focus.cryptotracker.ui.adapters.CoinItemAdapter
 import com.focus.cryptotracker.ui.adapters.SearchCoinItemAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,14 +26,9 @@ import kotlinx.coroutines.launch
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [AddCoinsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AddCoinsFragment : Fragment() {
 
-    private lateinit var remoteSource: CryptoApiDataSource
+    private lateinit var remoteSource: CoinRemoteDataSource
     private lateinit var binding: FragmentAddCoinsBinding
     private lateinit var searchCoinItemAdapter: SearchCoinItemAdapter
 
@@ -36,10 +36,10 @@ class AddCoinsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+
          binding = FragmentAddCoinsBinding.inflate(layoutInflater)
          searchCoinItemAdapter = SearchCoinItemAdapter(requireContext())
-
-         remoteSource = CryptoApiDataSource(Dispatchers.IO)
 
          binding.rvSearchCoin.layoutManager = LinearLayoutManager(requireContext())
          binding.rvSearchCoin.adapter = searchCoinItemAdapter
@@ -50,18 +50,34 @@ class AddCoinsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+      val viewModel = ViewModelProvider(requireActivity()).get(CoinDataViewModel::class.java)
+
         binding.searchButton.setOnClickListener {
 
             var s = binding.searchCoin.text.toString()
 
             if(s.isBlank()) s = ""
 
-            CoroutineScope(Dispatchers.Main).launch {
+            val v = viewModel.getSearch(binding.searchCoin.text.toString())
 
-             searchCoinItemAdapter.updateList(remoteSource.getSearch(s).coins)
+            v.observe(requireActivity(),object :Observer<List<SearchCoin>>{
+                override fun onChanged(t: List<SearchCoin>?) {
+                    searchCoinItemAdapter.updateList(t!!)
+                    binding.searchCoin.text.clear()
+                }
+            })
+
+
+        }
+
+        val onClick = object : SearchCoinItemAdapter.onButtonClickInterface{
+            override fun onAddButtonClick(searchCoin: SearchCoin) {
+                viewModel.addSearchCoin(searchCoin)
+                    Toast.makeText(requireContext(),"Added Successfully.",Toast.LENGTH_SHORT).show()
 
             }
         }
-    }
 
+        searchCoinItemAdapter.setOnButtonClickInterface(onClick)
+    }
 }

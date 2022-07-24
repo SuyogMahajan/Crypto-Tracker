@@ -28,10 +28,12 @@
             android:layout_marginStart="25dp"
             android:layout_weight="5"
             android:lines="1"
+
             android:layout_gravity="center"
-            android:background="@color/white"
+            android:background="#00FFFFFF"
             android:hint="Search"
-            android:textColor="@color/black" />
+            android:textColorHint="@color/white"
+            android:textColor="@color/white" />
 
         <ImageButton
             android:id="@+id/searchButton"
@@ -48,9 +50,12 @@
         android:id="@+id/rvSearchCoin"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:tooltipText="You dont have any data"
         android:layout_below="@id/searchbar"
         android:layout_marginHorizontal="10dp"
+
         tools:listitem="@layout/list_item_coin_details"
         />
 
 </RelativeLayout>
+

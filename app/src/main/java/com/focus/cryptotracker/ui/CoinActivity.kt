@@ -5,10 +5,13 @@ import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.focus.cryptotracker.R
 import com.focus.cryptotracker.data.model.Coin
-import com.focus.cryptotracker.data.source.remote.CryptoApiDataSource
+import com.focus.cryptotracker.data.source.remote.CoinRemoteDataSource
+import com.focus.cryptotracker.data.source.repository.CoinDataViewModel
 import com.focus.cryptotracker.databinding.ActivityCoinBinding
 import com.github.mikephil.charting.data.CandleData
 import com.github.mikephil.charting.data.CandleDataSet
@@ -22,9 +25,12 @@ class CoinActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCoinBinding
     private lateinit var coin: Coin
+    private lateinit var viewModel: CoinDataViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        viewModel = ViewModelProvider(this).get(CoinDataViewModel::class.java)
 
         binding = ActivityCoinBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -32,42 +38,19 @@ class CoinActivity : AppCompatActivity() {
         coin = intent.getSerializableExtra(CLICKED_COIN) as Coin
 
         binding.nameTv.text = coin.name
-        binding.prizeTv.text = "$ " + coin.currentPrice.toString()
-        binding.rankTv.text = coin.marketCapRank.toString()
+        binding.prizeTv.text = "$ " + coin.current_price.toString()
+        binding.rankTv.text = coin.market_cap_rank.toString()
         binding.codeTv.text = coin.symbol
-        binding.totalSupplyTv.text ="Total Supply : " + "$ " + coin.totalSupply.toLong().toString()
-        binding.circulatingSupplyTv.text = "Circulating Supply : " +"$ " + coin.circulatingSupply.toLong().toString()
+        binding.totalSupplyTv.text ="Total Supply : " + "$ " + coin.total_supply.toLong().toString()
+        binding.circulatingSupplyTv.text = "Circulating Supply : " +"$ " + coin.circulating_supply.toLong().toString()
+
         Glide.with(this).load(coin.image).into(binding.iconIv)
+         setChart(coin)
 
+        binding.refreshLayout.setOnRefreshListener {
+            refreshChart()
+        }
 
-        setChart(coin)
-
-
-//       val l = LineDataSet(listOf(Entry(0f,0f),
-//            Entry(1f,5f),Entry
-//                (3f,2f)),"trial")
-//
-//        l.color = R.color.black
-//        l.lineWidth = 2f
-//
-//        binding.chatViewCandle.data = LineData(l)
-
-
-//        val dataSet = CandleDataSet(
-//            listOf(
-//                CandleEntry(0f, 255.0f, 211f, 221f, 215f),
-//                CandleEntry(1f, 211.0f, 255f, 215f, 221f)
-//            ), "trial"
-//        )
-//        dataSet.shadowColor = resources.getColor(R.color.black)
-//        dataSet.shadowWidth = 1f
-//
-//        dataSet.decreasingColor = Color.parseColor("#FF0000")
-//        dataSet.decreasingPaintStyle = Paint.Style.FILL
-//
-//        dataSet.increasingColor = Color.parseColor("#64DD17")
-//        dataSet.increasingPaintStyle = Paint.Style.FILL
-//        binding.chatViewCandle.data = CandleData(dataSet)
     }
 
     private fun setChart(coin: Coin) {
@@ -80,60 +63,53 @@ class CoinActivity : AppCompatActivity() {
         binding.chatViewCandle.axisLeft.textColor = getColor(R.color.white)
         binding.chatViewCandle.axisRight.textColor = getColor(R.color.white)
 
-        CoroutineScope(Dispatchers.Main).launch {
+        refreshChart()
 
-            val dataSource = CryptoApiDataSource(Dispatchers.IO)
-            val chartData = dataSource.getCoinChart(coin.id)
-            var i = 1f
+    }
 
-            val candleEntryList = chartData.map {
-                CandleEntry(
-                    it[0].toFloat()/8640000,
-                    it[2].toFloat(),
-                    it[3].toFloat(),
-                    it[1].toFloat(),
-                    it[4].toFloat()
-                )
+    private fun refreshChart() {
+
+
+        val chartData = viewModel.getCoinChart(coin.id)
+
+        chartData.observe(this, object : Observer<List<List<Double>>> {
+            override fun onChanged(t: List<List<Double>>?) {
+                val candleEntryList = t!!.map {
+                    CandleEntry(
+                        it[0].toFloat() / 8640000,
+                        it[2].toFloat(),
+                        it[3].toFloat(),
+                        it[1].toFloat(),
+                        it[4].toFloat()
+                    )
+                }
+
+                val candleDataSet = CandleDataSet(candleEntryList, "Price")
+
+                candleDataSet.shadowColor = getColor(R.color.white)
+                candleDataSet.shadowWidth = 1f;
+                candleDataSet.setDrawValues(false)
+
+                candleDataSet.decreasingColor = Color.RED
+                candleDataSet.decreasingPaintStyle = Paint.Style.STROKE
+
+                candleDataSet.increasingColor = Color.GREEN
+                candleDataSet.increasingPaintStyle = Paint.Style.STROKE
+                candleDataSet.color = getColor(R.color.black)
+
+
+                val candleData = CandleData(candleDataSet)
+
+                binding.chatViewCandle.animateXY(2000,1000)
+                binding.chatViewCandle.startLayoutAnimation()
+                binding.chatViewCandle.data = candleData
+                binding.chatViewCandle.startLayoutAnimation()
+
+
+                binding.refreshLayout.isRefreshing = false
             }
 
-            Log.d("HELLO?",chartData.size.toString())
-            val candleDataSet = CandleDataSet(candleEntryList,"Price")
-
-            candleDataSet.shadowColor = resources.getColor(R.color.white)
-            candleDataSet.shadowWidth = 1f;
-            candleDataSet.setDrawValues(false)
-
-            candleDataSet.decreasingColor = Color.RED
-            candleDataSet.decreasingPaintStyle = Paint.Style.STROKE
-
-            candleDataSet.increasingColor = Color.GREEN
-            candleDataSet.increasingPaintStyle = Paint.Style.STROKE
-            candleDataSet.color = getColor(R.color.black)
-
-            val candleData = CandleData(candleDataSet)
-            binding.chatViewCandle.data = candleData
-
-//            val prices = chartData.prices!!.map {
-//                Entry(it[0].toFloat(), it[1].toFloat())
-//            }
-//
-//            val marketCap = chartData.marketCaps!!.map {
-//                Entry(it[0].toFloat(), it[1].toFloat())
-//            }
-//
-//            val priceLineData = LineDataSet(prices,"Price")
-//            priceLineData.color = resources.getColor(R.color.green)
-//            priceLineData.setCircleColor(resources.getColor(R.color.black))
-//            priceLineData.lineWidth = 1.5f
-//
-//            val marketCapData = LineDataSet(marketCap,"Market Capital")
-//            priceLineData.color = R.color.green
-//            priceLineData.disableDashedLine()
-//
-//        val lineData = LineData(listOf(priceLineData))
-//            binding.chatViewCandle.data = lineData
-
-        }
+        })
 
     }
 }

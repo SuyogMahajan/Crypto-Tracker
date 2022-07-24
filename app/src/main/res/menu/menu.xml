@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 <item android:title="Coins"
-    android:id="@+id/listButton"
-      android:icon="@drawable/ic_bitcoin"
+      android:id="@+id/listButton"
+      android:icon="@drawable/ic_home"
       app:showAsAction="ifRoom"
 
       />
     <item android:title="Add"
         android:id="@+id/addCoin"
-        android:icon="@drawable/ic_add"
+        android:icon="@drawable/ic_add_drawable"
         app:showAsAction="ifRoom"
         />
 </menu>
