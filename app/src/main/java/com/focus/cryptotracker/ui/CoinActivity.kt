@@ -1,11 +1,13 @@
 package com.focus.cryptotracker.ui
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -29,6 +31,7 @@ class CoinActivity : AppCompatActivity() {
     private lateinit var coin: Coin
     private lateinit var viewModel: CoinDataViewModel
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -46,7 +49,7 @@ class CoinActivity : AppCompatActivity() {
         binding.totalSupplyTv.text ="Total Supply : " + "$ " + coin.total_supply.toLong().toString()
         binding.circulatingSupplyTv.text = "Circulating Supply : " +"$ " + coin.circulating_supply.toLong().toString()
 
-        Glide.with(this).load(coin.image).into(binding.iconIv)
+         Glide.with(this).load(coin.image).into(binding.iconIv)
          setChart(coin)
 
         binding.refreshLayout.setOnRefreshListener {

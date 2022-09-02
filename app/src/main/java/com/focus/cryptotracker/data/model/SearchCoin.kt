@@ -16,5 +16,8 @@ data class SearchCoin(
                       )
 
 data class ListSearchCoin(
+
     @SerializedName("coins")
-    val coins:List<SearchCoin> )
+    val coins:List<SearchCoin>
+
+    )

@@ -58,7 +58,6 @@
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
-
             <TextView
                 android:id="@+id/totalSupplyTv"
                 android:layout_width="wrap_content"

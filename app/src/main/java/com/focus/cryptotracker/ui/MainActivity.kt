@@ -9,6 +9,8 @@ import com.focus.cryptotracker.R
 import com.focus.cryptotracker.databinding.ActivityMainBinding
 import com.focus.cryptotracker.ui.fragments.AddCoinsFragment
 import com.focus.cryptotracker.ui.fragments.CoinsFragment
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         val coinFrag = CoinsFragment()
 
         replaceFrag(coinFrag)
+
         binding.navBar.setOnItemSelectedListener { menuItem ->
 
             Log.d("ITEM_ID",menuItem.itemId.toString())
@@ -45,7 +48,6 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
-
     }
 
     private fun checkInternet() {
@@ -59,5 +61,4 @@ class MainActivity : AppCompatActivity() {
         t.replace(binding.fragView.id,frag)
         t.commit()
     }
-
 }
